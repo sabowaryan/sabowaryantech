@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   /* Sabowaryan Brand Colors */
@@ -57,7 +55,7 @@
 
 @layer base {
   * {
-    @apply border;
+    border-color: hsl(var(--border));
   }
 
   html {
@@ -66,7 +64,9 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: system-ui, -apple-system, sans-serif;
     font-feature-settings: 'rlig' 1, 'calt' 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -80,18 +80,18 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted/30;
+    background-color: hsl(var(--muted) / 0.3);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30;
+    background-color: hsl(var(--muted-foreground) / 0.3);
     border-radius: 4px;
     transition: background-color 0.2s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/50;
+    background-color: hsl(var(--muted-foreground) / 0.5);
   }
 
   /* Firefox Scrollbar */
@@ -102,7 +102,8 @@
 
   /* Focus Styles */
   :focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--ring)), 0 0 0 4px hsl(var(--background));
   }
 
   /* Selection */
@@ -122,58 +123,70 @@
 @layer components {
   /* Typography Base Classes */
   .text-display-2xl {
-    @apply text-7xl font-bold tracking-tight;
+    font-size: 4.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.1;
   }
 
   .text-display-xl {
-    @apply text-6xl font-bold tracking-tight;
+    font-size: 3.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.1;
   }
 
   .text-display-lg {
-    @apply text-5xl font-bold tracking-tight;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.2;
   }
 
   .text-display-md {
-    @apply text-4xl font-bold tracking-tight;
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.2;
   }
 
   .text-display-sm {
-    @apply text-3xl font-bold tracking-tight;
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.25;
   }
 
   .text-display-xs {
-    @apply text-2xl font-bold tracking-tight;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: 1.3;
   }
 
   /* Body Text */
   .text-body-xl {
-    @apply text-xl;
+    font-size: 1.25rem;
     line-height: 1.7;
   }
 
   .text-body-lg {
-    @apply text-lg;
+    font-size: 1.125rem;
     line-height: 1.7;
   }
 
   .text-body-md {
-    @apply text-base;
+    font-size: 1rem;
     line-height: 1.6;
   }
 
   .text-body-sm {
-    @apply text-sm;
+    font-size: 0.875rem;
     line-height: 1.5;
   }
 
   .text-body-xs {
-    @apply text-xs;
+    font-size: 0.75rem;
     line-height: 1.4;
   }
 
@@ -219,5 +232,47 @@
 
   .animate-scale-in {
     animation: scaleIn 0.2s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
