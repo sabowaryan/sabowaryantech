@@ -1,136 +1,66 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { CartItem } from '@/lib/types';
-import { toast } from 'react-hot-toast';
+import { immer } from 'zustand/middleware/immer';
+import { CartItem, Product } from '../types';
 
 interface CartState {
   items: CartItem[];
-  isOpen: boolean;
-  
-  // Actions
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  isLoading: boolean;
+  error: string | undefined;
+  addToCart: (product: Product, quantity?: number) => void;
+  removeFromCart: (productId: string) => void;
   clearCart: () => void;
-  toggleCart: () => void;
-  setCartOpen: (open: boolean) => void;
-  
-  // Computed values
-  getTotalPrice: () => number;
+  updateQuantity: (productId: string, quantity: number) => void;
+  total: () => number;
   getItemCount: () => number;
-  getItem: (id: string) => CartItem | undefined;
-  hasItem: (id: string) => boolean;
 }
 
 export const useCartStore = create<CartState>()(
-  persist(
-    (set, get) => ({
-      items: [],
-      isOpen: false,
-
-      addItem: (item) => {
-        const existingItem = get().items.find((i) => i.id === item.id);
-        
-        if (existingItem) {
-          // Update quantity if item already exists
-          set((state) => ({
-            items: state.items.map((i) =>
-              i.id === item.id 
-                ? { ...i, quantity: i.quantity + 1 }
-                : i
-            ),
-          }));
-          toast.success(`Increased ${item.name} quantity`);
+  immer((set, get) => ({
+    items: [],
+    isLoading: false,
+    error: undefined,
+    addToCart: (product, quantity = 1) => {
+      set((state) => {
+        // Si c'est un template, quantité = 1 max
+        const isTemplate = product.type === 'template';
+        const existing = state.items.find((i: CartItem) => i.product.id === product.id);
+        if (existing) {
+          if (isTemplate) return; // Pas de doublon pour les templates
+          existing.quantity += quantity;
         } else {
-          // Add new item
-          set((state) => ({
-            items: [...state.items, { ...item, quantity: 1 }],
-          }));
-          toast.success(`${item.name} added to cart`);
+          state.items.push({ product, quantity: isTemplate ? 1 : quantity, get total() { return this.product.price * this.quantity; } });
         }
-      },
-
-      removeItem: (id) => {
-        const item = get().items.find((i) => i.id === id);
-        if (item) {
-          set((state) => ({
-            items: state.items.filter((i) => i.id !== id),
-          }));
-          toast.success(`${item.name} removed from cart`);
+      });
+    },
+    removeFromCart: (productId) => {
+      set((state) => {
+        state.items = state.items.filter((i: CartItem) => i.product.id !== productId);
+      });
+    },
+    clearCart: () => set((state) => { state.items = []; }),
+    updateQuantity: (productId, quantity) => {
+      set((state) => {
+        const item = state.items.find((i: CartItem) => i.product.id === productId);
+        if (item && item.product.type !== 'template') {
+          item.quantity = quantity;
         }
-      },
-
-      updateQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(id);
-          return;
-        }
-
-        const item = get().items.find((i) => i.id === id);
-        if (item) {
-          set((state) => ({
-            items: state.items.map((i) =>
-              i.id === id ? { ...i, quantity } : i
-            ),
-          }));
-        }
-      },
-
-      clearCart: () => {
-        set({ items: [] });
-        toast.success('Cart cleared');
-      },
-
-      toggleCart: () => {
-        set((state) => ({ isOpen: !state.isOpen }));
-      },
-
-      setCartOpen: (open) => {
-        set({ isOpen: open });
-      },
-
-      getTotalPrice: () => {
-        return get().items.reduce((total, item) => {
-          return total + (item.price * item.quantity);
-        }, 0);
-      },
-
-      getItemCount: () => {
-        return get().items.reduce((count, item) => {
-          return count + item.quantity;
-        }, 0);
-      },
-
-      getItem: (id) => {
-        return get().items.find((item) => item.id === id);
-      },
-
-      hasItem: (id) => {
-        return get().items.some((item) => item.id === id);
-      },
-    }),
-    {
-      name: 'sabowaryan-cart',
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ 
-        items: state.items 
-      }),
-    }
-  )
+      });
+    },
+    total: () => get().items.reduce((sum, i: CartItem) => sum + i.product.price * i.quantity, 0),
+    getItemCount: () => get().items.reduce((sum, i: CartItem) => sum + i.quantity, 0),
+  }))
 );
 
 // Selectors for better performance
 export const useCartItems = () => useCartStore((state) => state.items);
-export const useCartTotal = () => useCartStore((state) => state.getTotalPrice());
-export const useCartCount = () => useCartStore((state) => state.getItemCount());
-export const useCartOpen = () => useCartStore((state) => state.isOpen);
+export const useCartTotal = () => useCartStore((state) => state.total());
+export const useCartLoading = () => useCartStore((state) => state.isLoading);
+export const useCartError = () => useCartStore((state) => state.error);
 
 // Actions
 export const useCartActions = () => useCartStore((state) => ({
-  addItem: state.addItem,
-  removeItem: state.removeItem,
-  updateQuantity: state.updateQuantity,
+  addToCart: state.addToCart,
+  removeFromCart: state.removeFromCart,
   clearCart: state.clearCart,
-  toggleCart: state.toggleCart,
-  setCartOpen: state.setCartOpen,
+  updateQuantity: state.updateQuantity,
 }));

@@ -124,7 +124,9 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productName }) 
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(images[isLightboxOpen ? lightboxIndex : currentIndex]);
+      const imageUrl = images[isLightboxOpen ? lightboxIndex : currentIndex];
+      if (!imageUrl) return;
+      const response = await fetch(imageUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');

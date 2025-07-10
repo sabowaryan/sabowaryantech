@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 
 interface ErrorBoundaryState {
   hasError: boolean;
-  error?: Error;
-  errorInfo?: any;
+  error?: Error | undefined;
+  errorInfo?: any | undefined;
 }
 
 interface ErrorBoundaryProps {
@@ -26,7 +26,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  override componentDidCatch(error: Error, errorInfo: any) {
     console.error('Error caught by boundary:', error, errorInfo);
     this.setState({ error, errorInfo });
   }
@@ -35,7 +35,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;

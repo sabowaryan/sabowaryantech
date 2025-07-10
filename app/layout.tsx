@@ -6,9 +6,13 @@ import Footer from '@/components/layout/footer';
 import ScrollToTop from '@/components/layout/scroll-to-top';
 import ErrorBoundary from '@/components/layout/error-boundary';
 import { ThemeProvider } from '@/components/layout/theme-provider';
+import CommandPalette from '@/components/layout/command-palette';
 import { Toaster } from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import ProgressBar from '@/components/layout/progress-bar';
+import Breadcrumbs from '@/components/layout/breadcrumbs';
+import NetworkStatus from '@/components/layout/network-status';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -117,12 +121,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      {/* Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -152,6 +150,11 @@ export default function RootLayout({
             />
           </>
         )}
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       
       <body className={inter.className}>
@@ -162,13 +165,15 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-1 pt-16 lg:pt-20">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <ProgressBar />
+            <NetworkStatus />
+            <CommandPalette />
+            <Header />
+            <Breadcrumbs />
+            <main className="flex-1 pt-16 lg:pt-20">
+              {children}
+            </main>
+            <Footer />
             
             <ScrollToTop />
             <Toaster 

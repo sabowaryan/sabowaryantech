@@ -1,59 +1,28 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+"use client";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronUp } from "lucide-react";
 
 const ScrollToTop: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    const onScroll = () => setVisible(window.scrollY > 200);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
+  if (!visible) return null;
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 20 }}
-          transition={{ duration: 0.3 }}
-          className="fixed bottom-8 right-8 z-40"
-        >
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <Button
-              onClick={scrollToTop}
-              size="lg"
-              className="w-14 h-14 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 p-0"
-              aria-label="Retour en haut"
-            >
-              <ArrowUp className="w-6 h-6" />
-            </Button>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.button
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 40 }}
+      transition={{ duration: 0.3 }}
+      className="fixed bottom-6 right-6 z-50 bg-primary-600 text-white rounded-full shadow-lg p-3 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-400"
+      aria-label="Remonter en haut"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      <ChevronUp className="w-6 h-6" />
+    </motion.button>
   );
 };
 

@@ -15,7 +15,7 @@ import {
   Heart, 
   ShoppingCart, 
   
-  User,
+
   Mail,
   Lock,
   Eye,
@@ -247,7 +247,9 @@ const DesignSystemShowcase: React.FC = () => {
           <H2 className="mb-6">Cards</H2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card variant="default" hover>
-              <CardHeader title="Default Card" subtitle="Basic card with hover effect" />
+              <CardHeader title="Default Card">
+                <div className="text-muted-foreground text-sm">Basic card with hover effect</div>
+              </CardHeader>
               <CardContent>
                 <BodyMedium>This is a default card with hover animation.</BodyMedium>
               </CardContent>
@@ -257,14 +259,18 @@ const DesignSystemShowcase: React.FC = () => {
             </Card>
 
             <Card variant="outlined">
-              <CardHeader title="Outlined Card" subtitle="Card with border emphasis" />
+              <CardHeader title="Outlined Card">
+                <div className="text-muted-foreground text-sm">Card with border emphasis</div>
+              </CardHeader>
               <CardContent>
                 <BodyMedium>This card has a prominent border styling.</BodyMedium>
               </CardContent>
             </Card>
 
             <Card variant="glass">
-              <CardHeader title="Glass Card" subtitle="Modern glass morphism effect" />
+              <CardHeader title="Glass Card">
+                <div className="text-muted-foreground text-sm">Modern glass morphism effect</div>
+              </CardHeader>
               <CardContent>
                 <BodyMedium>This card uses glass morphism styling.</BodyMedium>
               </CardContent>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId } from 'react';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { InputProps } from '@/lib/types/components';
@@ -47,7 +47,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     id,
     ...props 
   }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const reactId = useId();
+    const inputId = id || reactId;
     const hasError = Boolean(error);
 
     return (
