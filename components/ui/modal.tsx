@@ -1,32 +1,138 @@
-'use client';
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { X } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-import React, { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { cva } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
-import { ModalProps } from '@/lib/types/components';
-import { X } from 'lucide-react';
-import { Button } from './button';
+const Modal = DialogPrimitive.Root
 
-const modalVariants = cva(
-  'relative bg-background rounded-lg shadow-hard border animate-scale-in',
-  {
-    variants: {
-      size: {
-        sm: 'max-w-sm w-full mx-4',
-        md: 'max-w-md w-full mx-4',
-        lg: 'max-w-lg w-full mx-4',
-        xl: 'max-w-xl w-full mx-4',
-        full: 'max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-    },
+const ModalTrigger = DialogPrimitive.Trigger
+
+const ModalPortal = DialogPrimitive.Portal
+
+const ModalClose = DialogPrimitive.Close
+
+const ModalOverlay = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
+    {...props}
+  />
+))
+ModalOverlay.displayName = DialogPrimitive.Overlay.displayName
+
+const ModalContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   }
-);
+>(({ className, children, size = 'md', ...props }, ref) => {
+  const sizeClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    full: 'max-w-full'
+  }
 
-const Modal: React.FC<ModalProps> = ({
+  return (
+    <ModalPortal>
+      <ModalOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(
+          "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+          sizeClasses[size],
+          className
+        )}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </ModalPortal>
+  )
+})
+ModalContent.displayName = DialogPrimitive.Content.displayName
+
+const ModalHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex flex-col space-y-1.5 text-center sm:text-left",
+      className
+    )}
+    {...props}
+  />
+)
+ModalHeader.displayName = "ModalHeader"
+
+const ModalFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    )}
+    {...props}
+  />
+)
+ModalFooter.displayName = "ModalFooter"
+
+const ModalTitle = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn(
+      "text-lg font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+ModalTitle.displayName = DialogPrimitive.Title.displayName
+
+const ModalDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+ModalDescription.displayName = DialogPrimitive.Description.displayName
+
+// Custom Modal component with props interface
+interface ModalProps {
+  isOpen: boolean
+  onClose: () => void
+  title?: string
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  closeOnOverlayClick?: boolean
+  closeOnEscape?: boolean
+  showCloseButton?: boolean
+  footer?: React.ReactNode
+  children: React.ReactNode
+  className?: string
+}
+
+const CustomModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
@@ -36,119 +142,39 @@ const Modal: React.FC<ModalProps> = ({
   showCloseButton = true,
   footer,
   children,
-  className,
+  className
 }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      // Store the currently focused element
-      previousActiveElement.current = document.activeElement as HTMLElement;
-      
-      // Focus the modal
-      modalRef.current?.focus();
-      
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden';
-    } else {
-      // Restore body scroll
-      document.body.style.overflow = '';
-      
-      // Restore focus to the previously focused element
-      if (previousActiveElement.current) {
-        previousActiveElement.current.focus();
-      }
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && closeOnEscape) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, closeOnEscape, onClose]);
-
-  const handleOverlayClick = (event: React.MouseEvent) => {
-    if (event.target === event.currentTarget && closeOnOverlayClick) {
-      onClose();
-    }
-  };
-
-  if (!isOpen) return null;
-
-  const modalContent = (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in"
-      onClick={handleOverlayClick}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={title ? 'modal-title' : undefined}
-    >
-      <div
-        ref={modalRef}
-        className={cn(modalVariants({ size }), className)}
-        tabIndex={-1}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        {(title || showCloseButton) && (
-          <div className="flex items-center justify-between p-6 border-b">
-            {title && (
-              <h2 id="modal-title" className="text-lg font-semibold">
-                {title}
-              </h2>
-            )}
-            {showCloseButton && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="h-8 w-8 p-0"
-                aria-label="Close modal"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+  return (
+    <Modal open={isOpen} onOpenChange={onClose}>
+      <ModalContent size={size} className={className}>
+        {title && (
+          <ModalHeader>
+            <ModalTitle>{title}</ModalTitle>
+          </ModalHeader>
         )}
-
-        {/* Content */}
-        <div className={cn(
-          'p-6',
-          size === 'full' && 'flex-1 overflow-y-auto',
-          !(title || showCloseButton) && 'pt-6'
-        )}>
+        <div className="py-4">
           {children}
         </div>
-
-        {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-2 p-6 border-t bg-muted/30">
+          <ModalFooter>
             {footer}
-          </div>
+          </ModalFooter>
         )}
-      </div>
-    </div>
-  );
+      </ModalContent>
+    </Modal>
+  )
+}
 
-  return createPortal(modalContent, document.body);
-};
-
-Modal.displayName = 'Modal';
-
-export { Modal, modalVariants };
-export type { ModalProps };
+export {
+  Modal,
+  ModalPortal,
+  ModalOverlay,
+  ModalClose,
+  ModalTrigger,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+  CustomModal as Modal
+}

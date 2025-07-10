@@ -1,98 +1,93 @@
-'use client';
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-import React from 'react';
-import { cva } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
-import { LoadingSpinnerProps } from '@/lib/types/components';
-import { Loader2 } from 'lucide-react';
-
-const spinnerVariants = cva(
-  'animate-spin',
-  {
-    variants: {
-      size: {
-        xs: 'h-3 w-3',
-        sm: 'h-4 w-4',
-        md: 'h-6 w-6',
-        lg: 'h-8 w-8',
-        xl: 'h-12 w-12',
-      },
-      color: {
-        primary: 'text-primary',
-        secondary: 'text-secondary',
-        white: 'text-white',
-        current: 'text-current',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      color: 'primary',
-    },
-  }
-);
+interface LoadingSpinnerProps {
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  color?: 'primary' | 'secondary' | 'white' | 'current'
+  text?: string
+  className?: string
+}
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   color = 'primary',
   text,
-  className,
-  ...props
+  className
 }) => {
-  return (
-    <div 
-      className={cn('flex items-center justify-center gap-2', className)}
-      role="status"
-      aria-label={text || 'Loading'}
-      {...props}
-    >
-      <Loader2 className={cn(spinnerVariants({ size, color }))} />
-      {text && (
-        <span className="text-sm text-muted-foreground animate-pulse">
-          {text}
-        </span>
-      )}
-      <span className="sr-only">{text || 'Loading...'}</span>
-    </div>
-  );
-};
+  const sizeClasses = {
+    xs: 'w-3 h-3',
+    sm: 'w-4 h-4',
+    md: 'w-6 h-6',
+    lg: 'w-8 h-8',
+    xl: 'w-12 h-12'
+  }
 
-// Full page loading component
-const LoadingPage: React.FC<{ text?: string }> = ({ text = 'Loading...' }) => {
+  const colorClasses = {
+    primary: 'text-primary-600',
+    secondary: 'text-secondary-600',
+    white: 'text-white',
+    current: 'text-current'
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-      <div className="flex flex-col items-center gap-4 p-8 bg-card rounded-lg shadow-medium border">
-        <LoadingSpinner size="xl" text={text} />
+    <div className={cn("flex items-center justify-center", className)}>
+      <div className="flex items-center gap-2">
+        <div
+          className={cn(
+            "animate-spin rounded-full border-2 border-current border-t-transparent",
+            sizeClasses[size],
+            colorClasses[color]
+          )}
+        />
+        {text && (
+          <span className={cn("text-sm font-medium", colorClasses[color])}>
+            {text}
+          </span>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-// Inline loading component
-const LoadingInline: React.FC<LoadingSpinnerProps> = (props) => {
-  return (
-    <div className="flex items-center justify-center py-8">
-      <LoadingSpinner {...props} />
-    </div>
-  );
-};
+interface LoadingPageProps {
+  text?: string
+  className?: string
+}
 
-// Button loading state
-const LoadingButton: React.FC<{ size?: 'xs' | 'sm' | 'md' | 'lg' }> = ({ 
-  size = 'sm' 
+const LoadingPage: React.FC<LoadingPageProps> = ({
+  text = "Loading...",
+  className
 }) => {
-  return <LoadingSpinner size={size} color="current" />;
-};
+  return (
+    <div className={cn(
+      "fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm",
+      className
+    )}>
+      <div className="flex flex-col items-center gap-4">
+        <LoadingSpinner size="lg" />
+        <p className="text-lg font-medium text-muted-foreground">{text}</p>
+      </div>
+    </div>
+  )
+}
 
-LoadingSpinner.displayName = 'LoadingSpinner';
-LoadingPage.displayName = 'LoadingPage';
-LoadingInline.displayName = 'LoadingInline';
-LoadingButton.displayName = 'LoadingButton';
+interface LoadingInlineProps {
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  text?: string
+  className?: string
+}
 
-export { 
-  LoadingSpinner, 
-  LoadingPage, 
-  LoadingInline, 
-  LoadingButton,
-  spinnerVariants 
-};
-export type { LoadingSpinnerProps };
+const LoadingInline: React.FC<LoadingInlineProps> = ({
+  size = 'sm',
+  text,
+  className
+}) => {
+  return (
+    <div className={cn("flex items-center gap-2", className)}>
+      <LoadingSpinner size={size} color="current" />
+      {text && <span className="text-sm">{text}</span>}
+    </div>
+  )
+}
+
+export { LoadingSpinner, LoadingPage, LoadingInline }

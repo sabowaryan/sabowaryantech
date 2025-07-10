@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { LoginSchema, type LoginForm } from '@/lib/types';
+import { LoginFormSchema, type LoginForm } from '@/lib/types';
 import { useAuthStore } from '@/lib/store/auth';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(LoginFormSchema),
   });
 
   const onSubmit = async (data: LoginForm) => {

@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
-import { Modal } from '@/components/ui/modal';
+import { Card, CardHeader, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
+import { CustomToastProvider, useToast } from '@/components/ui/toast';
 import { LoadingSpinner, LoadingPage, LoadingInline } from '@/components/ui/loading-spinner';
-import { ToastProvider, useToast } from '@/components/ui/toast';
 import { 
   H1, H2, H3, H4, 
   BodyLarge, BodyMedium, BodySmall, Caption 
@@ -22,6 +21,36 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+
+// Simple Modal component for the showcase
+const SimpleModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}> = ({ isOpen, onClose, title, children, footer }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{title}</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            ×
+          </button>
+        </div>
+        <div className="mb-4">{children}</div>
+        {footer && <div className="flex justify-end gap-2">{footer}</div>}
+      </div>
+    </div>
+  );
+};
 
 const DesignSystemShowcase: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -297,11 +326,10 @@ const DesignSystemShowcase: React.FC = () => {
         </Card>
 
         {/* Modal */}
-        <Modal
+        <SimpleModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           title="Design System Modal"
-          size="md"
           footer={
             <>
               <Button variant="outline" onClick={() => setIsModalOpen(false)}>
@@ -325,7 +353,7 @@ const DesignSystemShowcase: React.FC = () => {
               <li>Smooth animations</li>
             </ul>
           </div>
-        </Modal>
+        </SimpleModal>
 
         {/* Loading Page */}
         {loading && <LoadingPage text="Loading design system..." />}
@@ -336,9 +364,9 @@ const DesignSystemShowcase: React.FC = () => {
 
 const DesignSystemShowcaseWrapper: React.FC = () => {
   return (
-    <ToastProvider>
+    <CustomToastProvider>
       <DesignSystemShowcase />
-    </ToastProvider>
+    </CustomToastProvider>
   );
 };
 

@@ -1,191 +1,141 @@
-'use client';
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-import React, { forwardRef } from 'react';
-import { cva } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
-import { HeadingProps, TextProps } from '@/lib/types/components';
+interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold'
+  color?: 'default' | 'muted' | 'primary' | 'secondary'
+  gradient?: boolean
+}
 
-const headingVariants = cva(
-  'font-bold tracking-tight',
-  {
-    variants: {
-      size: {
-        xs: 'text-display-xs',
-        sm: 'text-display-sm',
-        md: 'text-display-md',
-        lg: 'text-display-lg',
-        xl: 'text-display-xl',
-        '2xl': 'text-display-2xl',
-      },
-      weight: {
-        normal: 'font-normal',
-        medium: 'font-medium',
-        semibold: 'font-semibold',
-        bold: 'font-bold',
-      },
-      color: {
-        default: 'text-foreground',
-        muted: 'text-muted-foreground',
-        primary: 'text-primary',
-        secondary: 'text-secondary',
-      },
-      gradient: {
-        true: 'text-gradient',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      weight: 'bold',
-      color: 'default',
-      gradient: false,
-    },
+interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  as?: 'p' | 'span' | 'div'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold'
+  color?: 'default' | 'muted' | 'primary' | 'secondary' | 'success' | 'warning' | 'error'
+  align?: 'left' | 'center' | 'right' | 'justify'
+}
+
+const headingSizes = {
+  xs: 'text-lg',
+  sm: 'text-xl',
+  md: 'text-2xl',
+  lg: 'text-3xl',
+  xl: 'text-4xl',
+  '2xl': 'text-5xl'
+}
+
+const textSizes = {
+  xs: 'text-xs',
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+  xl: 'text-xl'
+}
+
+const weights = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold'
+}
+
+const colors = {
+  default: 'text-foreground',
+  muted: 'text-muted-foreground',
+  primary: 'text-primary',
+  secondary: 'text-secondary',
+  success: 'text-green-600 dark:text-green-400',
+  warning: 'text-yellow-600 dark:text-yellow-400',
+  error: 'text-red-600 dark:text-red-400'
+}
+
+const aligns = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+  justify: 'text-justify'
+}
+
+const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+  ({ as: Component = 'h2', size = 'md', weight = 'semibold', color = 'default', gradient = false, className, children, ...props }, ref) => {
+    const classes = cn(
+      headingSizes[size],
+      weights[weight],
+      gradient ? 'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent' : colors[color],
+      className
+    )
+
+    return React.createElement(
+      Component,
+      { ref, className: classes, ...props },
+      children
+    )
   }
-);
+)
+Heading.displayName = "Heading"
 
-const textVariants = cva(
-  '',
-  {
-    variants: {
-      size: {
-        xs: 'text-body-xs',
-        sm: 'text-body-sm',
-        md: 'text-body-md',
-        lg: 'text-body-lg',
-        xl: 'text-body-xl',
-      },
-      weight: {
-        normal: 'font-normal',
-        medium: 'font-medium',
-        semibold: 'font-semibold',
-        bold: 'font-bold',
-      },
-      color: {
-        default: 'text-foreground',
-        muted: 'text-muted-foreground',
-        primary: 'text-primary',
-        secondary: 'text-secondary',
-        success: 'text-success',
-        warning: 'text-warning',
-        error: 'text-error',
-      },
-      align: {
-        left: 'text-left',
-        center: 'text-center',
-        right: 'text-right',
-        justify: 'text-justify',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      weight: 'normal',
-      color: 'default',
-      align: 'left',
-    },
+const Text = React.forwardRef<HTMLElement, TextProps>(
+  ({ as: Component = 'p', size = 'md', weight = 'normal', color = 'default', align = 'left', className, children, ...props }, ref) => {
+    const classes = cn(
+      textSizes[size],
+      weights[weight],
+      colors[color],
+      aligns[align],
+      className
+    )
+
+    return React.createElement(
+      Component,
+      { ref, className: classes, ...props },
+      children
+    )
   }
-);
+)
+Text.displayName = "Text"
 
-const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ 
-    as: Component = 'h1', 
-    size, 
-    weight, 
-    color, 
-    gradient, 
-    className, 
-    children, 
-    ...props 
-  }, ref) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn(headingVariants({ size, weight, color, gradient, className }))}
-        {...props}
-      >
-        {children}
-      </Component>
-    );
-  }
-);
+// Specific heading components
+const H1 = React.forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
+  (props, ref) => <Heading ref={ref} as="h1" size="2xl" {...props} />
+)
+H1.displayName = "H1"
 
-const Text = forwardRef<HTMLParagraphElement, TextProps>(
-  ({ 
-    as: Component = 'p', 
-    size, 
-    weight, 
-    color, 
-    align, 
-    className, 
-    children, 
-    ...props 
-  }, ref) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn(textVariants({ size, weight, color, align, className }))}
-        {...props}
-      >
-        {children}
-      </Component>
-    );
-  }
-);
+const H2 = React.forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
+  (props, ref) => <Heading ref={ref} as="h2" size="xl" {...props} />
+)
+H2.displayName = "H2"
 
-// Convenience components
-const H1 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h1" size="2xl" ref={ref} {...props} />
-);
+const H3 = React.forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
+  (props, ref) => <Heading ref={ref} as="h3" size="lg" {...props} />
+)
+H3.displayName = "H3"
 
-const H2 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h2" size="xl" ref={ref} {...props} />
-);
+const H4 = React.forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
+  (props, ref) => <Heading ref={ref} as="h4" size="md" {...props} />
+)
+H4.displayName = "H4"
 
-const H3 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h3" size="lg" ref={ref} {...props} />
-);
+// Specific text components
+const BodyLarge = React.forwardRef<HTMLParagraphElement, Omit<TextProps, 'as' | 'size'>>(
+  (props, ref) => <Text ref={ref} as="p" size="lg" {...props} />
+)
+BodyLarge.displayName = "BodyLarge"
 
-const H4 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h4" size="md" ref={ref} {...props} />
-);
+const BodyMedium = React.forwardRef<HTMLParagraphElement, Omit<TextProps, 'as' | 'size'>>(
+  (props, ref) => <Text ref={ref} as="p" size="md" {...props} />
+)
+BodyMedium.displayName = "BodyMedium"
 
-const H5 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h5" size="sm" ref={ref} {...props} />
-);
+const BodySmall = React.forwardRef<HTMLParagraphElement, Omit<TextProps, 'as' | 'size'>>(
+  (props, ref) => <Text ref={ref} as="p" size="sm" {...props} />
+)
+BodySmall.displayName = "BodySmall"
 
-const H6 = forwardRef<HTMLHeadingElement, Omit<HeadingProps, 'as'>>(
-  (props, ref) => <Heading as="h6" size="xs" ref={ref} {...props} />
-);
-
-// Body text variants
-const BodyLarge = forwardRef<HTMLParagraphElement, Omit<TextProps, 'size'>>(
-  (props, ref) => <Text size="lg" ref={ref} {...props} />
-);
-
-const BodyMedium = forwardRef<HTMLParagraphElement, Omit<TextProps, 'size'>>(
-  (props, ref) => <Text size="md" ref={ref} {...props} />
-);
-
-const BodySmall = forwardRef<HTMLParagraphElement, Omit<TextProps, 'size'>>(
-  (props, ref) => <Text size="sm" ref={ref} {...props} />
-);
-
-const Caption = forwardRef<HTMLParagraphElement, Omit<TextProps, 'size' | 'color'>>(
-  (props, ref) => <Text size="xs" color="muted" ref={ref} {...props} />
-);
-
-// Display names
-Heading.displayName = 'Heading';
-Text.displayName = 'Text';
-H1.displayName = 'H1';
-H2.displayName = 'H2';
-H3.displayName = 'H3';
-H4.displayName = 'H4';
-H5.displayName = 'H5';
-H6.displayName = 'H6';
-BodyLarge.displayName = 'BodyLarge';
-BodyMedium.displayName = 'BodyMedium';
-BodySmall.displayName = 'BodySmall';
-Caption.displayName = 'Caption';
+const Caption = React.forwardRef<HTMLSpanElement, Omit<TextProps, 'as' | 'size'>>(
+  (props, ref) => <Text ref={ref} as="span" size="xs" color="muted" {...props} />
+)
+Caption.displayName = "Caption"
 
 export {
   Heading,
@@ -194,14 +144,8 @@ export {
   H2,
   H3,
   H4,
-  H5,
-  H6,
   BodyLarge,
   BodyMedium,
   BodySmall,
-  Caption,
-  headingVariants,
-  textVariants,
-};
-
-export type { HeadingProps, TextProps };
+  Caption
+}

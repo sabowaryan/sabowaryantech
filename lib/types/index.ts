@@ -156,6 +156,11 @@ export type LoginForm = z.infer<typeof LoginFormSchema>;
 export type RegisterForm = z.infer<typeof RegisterFormSchema>;
 export type ContactForm = z.infer<typeof ContactFormSchema>;
 
+// Export schemas with correct names for backward compatibility
+export const LoginSchema = LoginFormSchema;
+export const RegisterSchema = RegisterFormSchema;
+export const ContactSchema = ContactFormSchema;
+
 // API Response Types
 export interface ApiResponse<T = any> {
   success: boolean;
