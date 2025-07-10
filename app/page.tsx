@@ -6,7 +6,7 @@ import StatsSection from '@/components/landing/stats-section';
 import CTASection from '@/components/landing/cta-section';
 
 export const metadata: Metadata = {
-  title: 'SaboWaryanTech - Composants Premium pour Développeurs',
+  title: 'SaboWaryan - Composants Premium pour Développeurs',
   description: 'Découvrez notre collection de composants React, Vue et Angular premium. Téléchargement instantané, licence commerciale incluse, support technique 24/7.',
   keywords: [
     'composants React',
