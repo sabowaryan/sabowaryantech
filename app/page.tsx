@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import HeroSection from '@/components/landing/hero-section';
 import { ArrowRight, Code, Database, Globe, Smartphone, Shield, Zap } from 'lucide-react';
@@ -25,11 +25,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="Next.js 15">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
                   <Code className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <CardTitle>Next.js 15</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -45,11 +44,10 @@ export default function Home() {
             </Card>
 
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="State Management">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
                   <Database className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <CardTitle>State Management</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -65,11 +63,10 @@ export default function Home() {
             </Card>
 
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="UI Components">
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
                   <Globe className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
-                <CardTitle>UI Components</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -85,11 +82,10 @@ export default function Home() {
             </Card>
 
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="Animation">
                 <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center mb-4">
                   <Smartphone className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <CardTitle>Animation</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -105,11 +101,10 @@ export default function Home() {
             </Card>
 
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="Analytics">
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mb-4">
                   <Shield className="h-6 w-6 text-red-600 dark:text-red-400" />
                 </div>
-                <CardTitle>Analytics</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -125,11 +120,10 @@ export default function Home() {
             </Card>
 
             <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+              <CardHeader title="Developer Experience">
                 <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mb-4">
                   <Zap className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                 </div>
-                <CardTitle>Developer Experience</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
