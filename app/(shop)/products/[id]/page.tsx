@@ -142,28 +142,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: product.name,
-        }
-      ],
+      images: [imageUrl],
       type: 'product',
     },
     twitter: {
       card: 'summary_large_image',
       title: product.name,
       description: product.description,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: product.name,
-        }
-      ],
+      images: [imageUrl],
     },
   };
 }
