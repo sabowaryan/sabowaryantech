@@ -132,6 +132,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
+  // Ensure we have a valid image URL
+  const imageUrl = product.images[0] || '/og-default.jpg';
+
   return {
     title: `${product.name} - SaboWaryan Tech`,
     description: product.description,
@@ -141,7 +144,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: product.description,
       images: [
         {
-          url: product.images[0],
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: product.name,
@@ -155,7 +158,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: product.description,
       images: [
         {
-          url: product.images[0],
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: product.name,
