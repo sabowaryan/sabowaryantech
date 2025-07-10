@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import HeroSection from '@/components/landing/hero-section';
 import { ArrowRight, Code, Database, Globe, Smartphone, Shield, Zap } from 'lucide-react';
@@ -30,11 +30,11 @@ export default function Home() {
                   <Code className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <CardTitle>Next.js 15</CardTitle>
-                <CardDescription>
-                  Latest version with App Router, Server Components, and enhanced performance
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Latest version with App Router, Server Components, and enhanced performance
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• App Router Architecture</li>
                   <li>• Server Components</li>
@@ -50,11 +50,11 @@ export default function Home() {
                   <Database className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
                 <CardTitle>State Management</CardTitle>
-                <CardDescription>
-                  Zustand for lightweight, scalable state management solutions
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Zustand for lightweight, scalable state management solutions
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• Zustand Store</li>
                   <li>• Form Validation</li>
@@ -70,11 +70,11 @@ export default function Home() {
                   <Globe className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
                 <CardTitle>UI Components</CardTitle>
-                <CardDescription>
-                  Shadcn/UI with Tailwind CSS for beautiful, accessible interfaces
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Shadcn/UI with Tailwind CSS for beautiful, accessible interfaces
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• Shadcn/UI Components</li>
                   <li>• Tailwind CSS</li>
@@ -90,11 +90,11 @@ export default function Home() {
                   <Smartphone className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <CardTitle>Animation</CardTitle>
-                <CardDescription>
-                  Framer Motion for smooth, professional animations and transitions
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Framer Motion for smooth, professional animations and transitions
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• Framer Motion</li>
                   <li>• Smooth Transitions</li>
@@ -110,11 +110,11 @@ export default function Home() {
                   <Shield className="h-6 w-6 text-red-600 dark:text-red-400" />
                 </div>
                 <CardTitle>Analytics</CardTitle>
-                <CardDescription>
-                  Vercel Analytics and Speed Insights for performance monitoring
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Vercel Analytics and Speed Insights for performance monitoring
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• Vercel Analytics</li>
                   <li>• Speed Insights</li>
@@ -130,11 +130,11 @@ export default function Home() {
                   <Zap className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <CardTitle>Developer Experience</CardTitle>
-                <CardDescription>
-                  Enhanced DX with TypeScript, hot reload, and modern tooling
-                </CardDescription>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Enhanced DX with TypeScript, hot reload, and modern tooling
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• TypeScript</li>
                   <li>• Hot Reload</li>
