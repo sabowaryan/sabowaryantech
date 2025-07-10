@@ -14,7 +14,7 @@ import {
   Search, 
   Heart, 
   ShoppingCart, 
-  Settings, 
+  
   User,
   Mail,
   Lock,
